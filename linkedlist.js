@@ -1,4 +1,4 @@
-class LinkedList {
+export class LinkedList {
     constructor(head = null) {
         this.head = head;
     }
@@ -8,9 +8,7 @@ class LinkedList {
             this.head = new Node(value, null);
         } else {
             let curr = this.head;
-            while (curr.next !== null) {
-                curr = curr.next;
-            }
+            curr = this.getTail();
             curr.next = new Node(value,null);
         }
     }
@@ -21,6 +19,7 @@ class LinkedList {
         } else {
             let newnode = new Node(value, this.head);
             this.head = newnode;
+
         }
     }
 
@@ -42,13 +41,14 @@ class LinkedList {
         return s;
     }
 
-    head() {
+    getHead() {
         return this.head;
     }
 
-    tail() {
+    getTail() {
         if (this.head === null) {
-            return;
+            console.log("Cannot get tail. Empty list.");
+            return null;
         }
 
         let curr = this.head;
@@ -63,7 +63,7 @@ class LinkedList {
         let currentIndex = 0;
 
         if (this.head === null) {
-            return;
+            return null;
         }
 
         if (index === 0) {return this.head};
@@ -82,7 +82,108 @@ class LinkedList {
         return;
     }
 
-    
+    pop() {
+        if (this.head === null) {
+            console.log("Invalid action: pop(). Empty list");
+            return;
+        }
+
+        if (this.head.next === null) {
+            this.head = null;
+            return;
+        }
+
+        let curr = this.head;
+        while (curr.next !== null) {
+            if (curr.next.next === null) {
+                curr.next = null;
+                return;
+            }
+            curr = curr.next;
+        }
+    }
+
+    contains(value) {
+        if (this.head === null) {
+            console.log("Empty list, no such element");
+            return;
+        }
+
+        let curr = this.head;
+        while (curr) {
+            if (curr.data === value) {return true;}
+            curr = curr.next;
+        }
+
+        return false;
+    }
+
+    find(value) {
+        if (this.head === null) {
+            return null;
+        }
+
+        let currentIndex = 0;
+        let curr = this.head;
+        while (curr) {
+            if (curr.data === value) {return currentIndex;}
+            curr = curr.next;
+            currentIndex++;
+        }
+
+        return null;
+
+    }
+
+    toString() {
+        let printString = "";
+        if (this.head === null) {
+            printString += "null"
+        }
+
+        let curr = this.head;
+        while (curr) {
+            printString = `${printString} ( ${curr.data} ) ->`;
+            curr = curr.next;
+        }
+        printString = `${printString} null`;
+
+        return printString;
+    }
+
+    insertAt(value, index) {
+        if (this.head === null) {
+            return;
+        }
+
+        if (index === 0) {
+            this.prepend(value);
+            return;
+        }
+        if (index > this.size()) {
+            console.log('Error, index out of range');
+            return;
+        }
+
+        let prevIndexNode = this.at(index - 1);
+        let currIndexNode = this.at(index);
+        let newnode = new Node(value, currIndexNode);
+        prevIndexNode.next = newnode;
+    }
+
+    removeAt(index) {
+        if (this.head === null) {
+            return;
+        }
+
+        if (index === 0) {
+            this.head = this.head.next;
+            return;
+        }
+
+        let prevIndexNode = this.at(index - 1);
+        prevIndexNode.next = prevIndexNode.next.next;
+    }
 }
 
 class Node {
@@ -93,3 +194,4 @@ class Node {
 
     
 }
+
